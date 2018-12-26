@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
+    "outDir": "./dist",
     "module": "commonjs",
     "target": "es2015",
     "sourceMap": true,
@@ -39,8 +40,7 @@
     }
   },
   "include": [
-    "packages/**/*",
-    "test"
+    "packages/**/*"
   ],
   "exclude": [
     "node_modules",

@@ -12,6 +12,7 @@ const jeditor = require("gulp-json-editor");
 const {sync} = require("execa");
 const ts = require("gulp-typescript");
 const sourcemaps = require("gulp-sourcemaps");
+const execa = require("execa");
 
 const all = require("./utils/all");
 
@@ -62,12 +63,15 @@ module.exports = {
    *
    */
   async bootstrap() {
-    findPackages()
+    await module.exports.compileDev();
+    await module.exports.copyDev();
+    await findPackages()
       .filter((packageName) => packageName !== "legacy")
       .map(pkgName => {
+
         logger("Mount package", chalk.cyan(`'${pkgName}'`));
 
-        sync("npm", ["link", `./${path.join(packagesDir, pkgName)}`], {
+        sync("npm", ["link", `./${path.join(packagesDir, pkgName).replace("src", "dist")}`], {
           stdio: "inherit"
         });
 
@@ -106,6 +110,12 @@ module.exports = {
     logger(`Finished '${chalk.cyan("repo:writePackages")}'`);
   },
 
+  async compileDev(g = gulp) {
+    logger("Compile all packages");
+
+    return execa("tsc", [], {cwd: process.cwd(), stdio: ["inherit"]});
+  },
+
   async compile(g = gulp) {
     const {version} = await readPackage();
 
@@ -132,6 +142,24 @@ module.exports = {
 
     return Promise.all(promises);
   },
+
+  async copyDev(g = gulp) {
+    const {version} = await readPackage();
+
+    const stream = g
+      .src([
+        `${packagesDir}/**/package.json`,
+        `${packagesDir}/**/views`,
+        `!${packagesDir}/**/src/**/*.{js,js.map,d.ts,ts}`,
+        `!${packagesDir}/**/package-lock.json`,
+        `!${packagesDir}/**/yarn.lock`,
+        `!${packagesDir}/**/node_modules/**`
+      ], {base: packagesDir})
+      .pipe(replace(versionPlaceholder, version))
+      .pipe(g.dest(`./${path.join(outputDir)}`));
+
+    return toPromise(stream);
+  },
   /**
    *
    * @returns {Promise<void | never>}
@@ -145,8 +173,8 @@ module.exports = {
         `${packagesDir}/**`,
         `${packagesDir}/**/.npmignore`,
         `!${packagesDir}/**/src/**/*.{js,js.map,d.ts}`,
-        `!${packagesDir}/**/src/package-lock.json`,
-        `!${packagesDir}/**/src/yarn.lock`,
+        `!${packagesDir}/**/package-lock.json`,
+        `!${packagesDir}/**/yarn.lock`,
         `!${packagesDir}/**/node_modules/**`
       ], {base: packagesDir})
       .pipe(replace(versionPlaceholder, version))
