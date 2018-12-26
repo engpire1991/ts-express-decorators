@@ -20,6 +20,7 @@ describe("Rest", () => {
           .expect(200)
           .end((err: any, response: any) => {
             if (err) {
+              console.error("Error =>", response.text);
               throw err;
             }
 
@@ -230,7 +231,7 @@ describe("Rest", () => {
           .put("/rest/calendars")
           .expect(400)
           .end((err: any, response: any) => {
-            expect(response.error.text).to.contains("Bad request, parameter \"request.body.name\" is required.");
+            expect(response.error.text).to.contains('Bad request, parameter "request.body.name" is required.');
             done();
           });
       });
@@ -267,7 +268,7 @@ describe("Rest", () => {
           .set({authorization: "token"})
           .expect(400)
           .end((err: any, response: any) => {
-            expect(response.error.text).to.contains("Bad request, parameter \"request.body.id\" is required.");
+            expect(response.error.text).to.contains('Bad request, parameter "request.body.id" is required.');
 
             done();
           });
@@ -326,7 +327,7 @@ describe("Rest", () => {
               {
                 dataPath: ".email",
                 keyword: "format",
-                message: "should match format \"email\"",
+                message: 'should match format "email"',
                 modelName: "User",
                 params: {
                   format: "email"
@@ -335,7 +336,7 @@ describe("Rest", () => {
               }
             ]);
 
-            expect(response.text).to.eq("Bad request on parameter \"request.body\".<br />At User.email should match format \"email\"");
+            expect(response.text).to.eq('Bad request on parameter "request.body".<br />At User.email should match format "email"');
             done();
           });
       });
@@ -347,7 +348,7 @@ describe("Rest", () => {
           .expect(400)
           .end((err: any, response: any) => {
             expect(response.text).to.eq(
-              "Bad request on parameter \"request.body\".<br />At User.password should NOT be shorter than 6 characters"
+              'Bad request on parameter "request.body".<br />At User.password should NOT be shorter than 6 characters'
             );
 
             expect(JSON.parse(response.headers.errors)).to.deep.eq([
@@ -442,7 +443,7 @@ describe("Rest", () => {
         .get("/rest/errors/custom-bad-request")
         .expect(400)
         .end((err: any, response: any) => {
-          expect(response.headers.errors).to.eq("[\"test\"]");
+          expect(response.headers.errors).to.eq('["test"]');
           expect(response.headers["x-header-error"]).to.eq("deny");
           expect(response.text).to.eq("Custom Bad Request");
           done();
@@ -454,7 +455,7 @@ describe("Rest", () => {
         .post("/rest/errors/required-param")
         .expect(400)
         .end((err: any, response: any) => {
-          expect(response.text).to.eq("Bad request, parameter \"request.body.name\" is required.");
+          expect(response.text).to.eq('Bad request, parameter "request.body.name" is required.');
 
           expect(JSON.parse(response.headers.errors)).to.deep.eq([
             {
@@ -525,7 +526,7 @@ describe("Rest", () => {
         .get("/rest/errors/error")
         .expect(500)
         .end((err: any, response: any) => {
-          expect(response.text).to.eq("Internal Error");
+          expect(response.text).to.contains("Internal Error");
           done();
         });
     });
@@ -535,7 +536,7 @@ describe("Rest", () => {
         .get("/rest/errors/custom-internal-error")
         .expect(500)
         .end((err: any, response: any) => {
-          expect(response.headers.errors).to.eq("[\"test\"]");
+          expect(response.headers.errors).to.eq('["test"]');
           expect(response.headers["x-header-error"]).to.eq("deny");
           expect(response.text).to.eq("My custom error");
           done();

@@ -1,7 +1,7 @@
-import {AfterRoutesInit, ExpressApplication, OnServerReady, ServerSettingsService, Service} from "@tsed/common";
 import * as Express from "express";
 import * as Fs from "fs";
 import * as PathUtils from "path";
+import {AfterRoutesInit, ExpressApplication, OnServerReady, ServerSettingsService, Service} from "@tsed/common";
 import {$log} from "ts-log-debug";
 import {ISwaggerSettings} from "./interfaces";
 import {SwaggerService} from "./services/SwaggerService";

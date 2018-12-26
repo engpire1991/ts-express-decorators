@@ -8,8 +8,7 @@
     "tslib": "^1.9.0"
   },
   "peerDependencies": {
-    "@tsed/common": "0.0.0-PLACEHOLDER",
-    "serve-static": "^1.13.2"
+    "@tsed/common": "0.0.0-PLACEHOLDER"
   },
   "devDependencies": {},
   "private": false

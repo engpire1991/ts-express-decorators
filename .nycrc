@@ -1,18 +1,25 @@
 {
   "include": [
-    "packages/**/*.js"
+    "packages/**/*.ts"
   ],
   "exclude": [
-    "**/index.ts",
-    "**/index.js",
-    "**/interfaces/*.js"
+    "**/*.d.ts",
+    "**/interfaces/*.ts",
+    "**/interfaces/*.ts",
+    "**/index.ts"
   ],
   "reporter": [
     "lcov",
     "text-summary"
   ],
   "extension": [
-    ".ts"
+    ".ts",
+    ".tsx"
+  ],
+  "require": [
+    "ts-node/register",
+    "tsconfig-paths/register",
+    "source-map-support/register"
   ],
   "check-coverage": true,
   "lines": 99,

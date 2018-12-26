@@ -32,7 +32,7 @@ const spec = require(`${rootDir}/spec/swagger.default.json`);
     "/rest/v1": "${rootDir}/controllers/{calendars,users}/**.ts"
   },
 
-  componentsScan: ["${rootDir}/services/**/**.js"],
+  componentsScan: ["${rootDir}/services/**/*.ts"],
 
   uploadDir: "${rootDir}/uploads",
 
@@ -87,8 +87,10 @@ export class ExampleServer extends ServerLoader {
       .use(compress({}))
       .use(methodOverride());
 
+    console.log("`${rootDir}/views`", `${rootDir}/views`);
+
     this.engine(".html", require("ejs").__express)
-      .set("views", "./views")
+      .set("views", `${rootDir}/views`)
       .set("view engine", "html");
 
     this.set("trust proxy", 1);

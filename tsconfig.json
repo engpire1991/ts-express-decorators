@@ -1,11 +1,10 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "outDir": "./dist",
     "module": "commonjs",
     "target": "es2015",
     "sourceMap": true,
-    "declaration": false,
+    "declaration": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "moduleResolution": "node",
@@ -17,6 +16,7 @@
     "noUnusedParameters": false,
     "importHelpers": true,
     "newLine": "LF",
+    "noEmit": true,
     "lib": [
       "es6",
       "dom"
@@ -25,22 +25,16 @@
       "./node_modules/@types"
     ],
     "paths": {
-      "@tsed/core": [
-        "./packages/core/src"
+      "*": [
+        "*"
       ],
-      "@tsed/di": [
-        "./packages/di/src"
-      ],
-      "@tsed/common": [
-        "./packages/common/src"
-      ],
-      "@tsed/testing": [
-        "./packages/testing/src"
+      "@tsed/*": [
+        "packages/*/src"
       ]
     }
   },
   "include": [
-    "packages/**/*"
+    "packages/**/src/**/*"
   ],
   "exclude": [
     "node_modules",

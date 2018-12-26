@@ -1,28 +1,27 @@
-import * as Proxyquire from "proxyquire";
+import * as Express from "express";
 import {ServerSettingsService} from "../../../../packages/common/src/config/services/ServerSettingsService";
 import {ExpressApplication} from "../../../../packages/common/src/mvc/decorators";
 import {invoke} from "../../../../packages/testing/src/invoke";
 import {Sinon} from "../../../tools";
-
-const middlewareServeStatic = Sinon.stub();
-const serveStatic = Sinon.stub();
-serveStatic.withArgs("/views").returns(middlewareServeStatic);
-
-const {ServeStaticService} = Proxyquire("../../../../packages/servestatic/src/services/ServeStaticService", {
-  "serve-static": serveStatic
-});
-const expressApplication = {
-  use: Sinon.stub()
-};
-
-const serverSettingService = {
-  serveStatic: {
-    "/path": "/views"
-  }
-};
+import {ServeStaticService} from "../../../../packages/servestatic/src";
 
 describe("ServeStaticService", () => {
+  let serveStatic: any;
+  const middlewareServeStatic = Sinon.stub();
+  const expressApplication = {
+    use: Sinon.stub()
+  };
+
+  const serverSettingService = {
+    serveStatic: {
+      "/path": "/views"
+    }
+  };
+
   before(() => {
+    serveStatic = Sinon.stub(Express, "static");
+    serveStatic.withArgs("/views").returns(middlewareServeStatic);
+
     this.serveStaticService = invoke(ServeStaticService, [
       {
         provide: ExpressApplication,
@@ -33,6 +32,10 @@ describe("ServeStaticService", () => {
         use: serverSettingService
       }
     ]);
+  });
+
+  after(() => {
+    serveStatic.restore();
   });
 
   describe("mount()", () => {
@@ -58,7 +61,7 @@ describe("ServeStaticService", () => {
         expressApplication.use.should.be.calledWithExactly("/path", Sinon.match.func);
       });
       it("should call serveStatic", () => {
-        serveStatic.should.be.calledWithExactly("/views");
+        serveStatic.should.be.calledWithExactly(Sinon.match("/views"));
       });
 
       it("should call the middleware", () => {

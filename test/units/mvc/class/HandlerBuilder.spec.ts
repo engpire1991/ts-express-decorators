@@ -1,14 +1,11 @@
-import {ProviderType} from "@tsed/common";
 import {inject} from "@tsed/testing";
 import {BadRequest} from "ts-httpexceptions";
-import "../../../../packages/ajv";
-import {InjectorService} from "../../../../packages/di/src/services/InjectorService";
-import {FilterBuilder} from "../../../../packages/common/src/filters/class/FilterBuilder";
-import {EndpointMetadata} from "../../../../packages/common/src/mvc/class/EndpointMetadata";
-import {HandlerBuilder} from "../../../../packages/common/src/mvc/class/HandlerBuilder";
-import {FakeRequest} from "../../../helper/FakeRequest";
-import {FakeResponse} from "../../../helper/FakeResponse";
+import "@tsed/ajv";
+import {ProviderType, InjectorService} from "@tsed/di";
+import {FakeRequest, FakeResponse} from "../../../helper";
 import {$logStub, assert, expect, restore, Sinon} from "../../../tools";
+import {EndpointMetadata, HandlerBuilder} from "../../../../packages/common/src/mvc";
+import {FilterBuilder} from "../../../../packages/common/src/filters/class/FilterBuilder";
 
 class Test {
   get() {}
@@ -75,7 +72,7 @@ describe("HandlerBuilder", () => {
 
           this.filterBuildStub = Sinon.stub(FilterBuilder.prototype, "build");
 
-          this.middleware = new HandlerBuilder(this.metadata).build(injector);
+          this.middleware = new HandlerBuilder(this.metadata).build(injector as any);
           this.middleware({request: "request"}, {response: "response"}, "function");
         })
       );
@@ -110,7 +107,7 @@ describe("HandlerBuilder", () => {
             services: [{param: "param"}]
           };
 
-          this.middleware = new HandlerBuilder(this.metadata).build(injector);
+          this.middleware = new HandlerBuilder(this.metadata).build(injector as any);
           this.middleware("error", {request: "request"}, {response: "response"}, "function");
         })
       );

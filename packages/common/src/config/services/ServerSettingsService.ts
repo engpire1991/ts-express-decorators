@@ -19,10 +19,6 @@ export let GlobalServerSettings: ServerSettingsService;
 /**
  * `ServerSettingsService` contains all information about [ServerLoader](/api/common/server/components/ServerLoader.md) configuration.
  */
-@Injectable({
-  scope: ProviderScope.SINGLETON,
-  global: true
-})
 export class ServerSettingsService implements IServerSettings, IDISettings {
   protected map = new Map<string, any>();
 
