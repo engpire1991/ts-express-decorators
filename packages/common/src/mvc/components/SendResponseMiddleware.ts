@@ -5,7 +5,8 @@ import {ResponseData} from "../../filters/decorators/responseData";
 
 import {Middleware} from "../decorators/class/middleware";
 import {IMiddleware} from "../interfaces/index";
-import {EndpointInfo, EndpointMetadata} from "@tsed/common";
+import {EndpointInfo} from "../../filters/decorators/endpointInfo";
+import {EndpointMetadata} from "../class/EndpointMetadata";
 
 @Middleware()
 export class SendResponseMiddleware implements IMiddleware {
